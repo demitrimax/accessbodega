@@ -18,57 +18,11 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for cat_clientes
--- ----------------------------
-DROP TABLE IF EXISTS `cat_clientes`;
-CREATE TABLE `cat_clientes`  (
-  `Id` int(11) NOT NULL,
-  `Nombre` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `RFC` varchar(13) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `DescuentoAdicional` float NULL DEFAULT NULL,
-  `Descuento` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `user` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`Id`) USING BTREE,
-  INDEX `id_cliente`(`Id`) USING BTREE,
-  CONSTRAINT `fk_cat_clientes_cat_precios_1` FOREIGN KEY (`Id`) REFERENCES `cat_precios` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for cat_descuentos
--- ----------------------------
-DROP TABLE IF EXISTS `cat_descuentos`;
-CREATE TABLE `cat_descuentos`  (
-  `id` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `nombre` varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `caption` varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for cat_precios
--- ----------------------------
-DROP TABLE IF EXISTS `cat_precios`;
-CREATE TABLE `cat_precios`  (
-  `ID` int(11) NOT NULL,
-  `Id_cliente` int(11) NULL DEFAULT NULL,
-  `id_Producto` int(11) NULL DEFAULT NULL,
-  `Precio` decimal(19, 4) NULL DEFAULT NULL,
-  `user_id` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`) USING BTREE,
-  INDEX `usuariomod`(`user_id`) USING BTREE,
-  INDEX `clientedat`(`Id_cliente`) USING BTREE,
-  INDEX `datproducto`(`id_Producto`) USING BTREE,
-  CONSTRAINT `clientedat` FOREIGN KEY (`Id_cliente`) REFERENCES `cat_clientes` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `datproducto` FOREIGN KEY (`id_Producto`) REFERENCES `cat_productos` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `usuariomod` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`Identificador`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
-
--- ----------------------------
 -- Table structure for cat_productos
 -- ----------------------------
 DROP TABLE IF EXISTS `cat_productos`;
 CREATE TABLE `cat_productos`  (
-  `Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `Descripción` varchar(120) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `StockMin` int(11) NULL DEFAULT NULL,
@@ -83,12 +37,75 @@ CREATE TABLE `cat_productos`  (
   PRIMARY KEY (`Id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
+
+-- ----------------------------
+-- Table structure for usuarios
+-- ----------------------------
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios`  (
+  `Identificador` int(11) NOT NULL AUTO_INCREMENT,
+  `NombreCompleto` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `username` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `contraseña` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `rol` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`Identificador`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for cat_descuentos
+-- ----------------------------
+DROP TABLE IF EXISTS `cat_descuentos`;
+CREATE TABLE `cat_descuentos`  (
+  `id` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `nombre` varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `caption` varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+
+-- ----------------------------
+-- Table structure for cat_clientes
+-- ----------------------------
+DROP TABLE IF EXISTS `cat_clientes`;
+CREATE TABLE `cat_clientes`  (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `RFC` varchar(13) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `DescuentoAdicional` float NULL DEFAULT NULL,
+  `Descuento` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `user` int(11) NULL DEFAULT NULL,
+  `eliminado` tinyint(1) NULL DEFAULT 0,
+  PRIMARY KEY (`Id`) USING BTREE,
+  INDEX `id_cliente`(`Id`) USING BTREE
+  ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+
+-- ----------------------------
+-- Table structure for cat_precios
+-- ----------------------------
+DROP TABLE IF EXISTS `cat_precios`;
+CREATE TABLE `cat_precios`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Id_cliente` int(11) NULL DEFAULT NULL,
+  `id_Producto` int(11) NULL DEFAULT NULL,
+  `Precio` decimal(19, 4) NULL DEFAULT NULL,
+  `user_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE,
+  INDEX `usuariomod`(`user_id`) USING BTREE,
+  INDEX `clientedat`(`Id_cliente`) USING BTREE,
+  INDEX `datproducto`(`id_Producto`) USING BTREE,
+  CONSTRAINT `clientedat` FOREIGN KEY (`Id_cliente`) REFERENCES `cat_clientes` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `datproducto` FOREIGN KEY (`id_Producto`) REFERENCES `cat_productos` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `usuariomod` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`Identificador`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+
 -- ----------------------------
 -- Table structure for cat_proveedores
 -- ----------------------------
 DROP TABLE IF EXISTS `cat_proveedores`;
 CREATE TABLE `cat_proveedores`  (
-  `Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `RFC` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
@@ -99,7 +116,7 @@ CREATE TABLE `cat_proveedores`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `datos_tienda`;
 CREATE TABLE `datos_tienda`  (
-  `Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `NombreTienda` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `Direccion` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `Telefonos` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
@@ -112,6 +129,33 @@ CREATE TABLE `datos_tienda`  (
   INDEX `IdUnico`(`IdUnico`) USING BTREE,
   CONSTRAINT `usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`Identificador`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+
+-- ----------------------------
+-- Table structure for ventas
+-- ----------------------------
+DROP TABLE IF EXISTS `ventas`;
+CREATE TABLE `ventas`  (
+  `IdV` int(11) NOT NULL AUTO_INCREMENT,
+  `FechaV` datetime(0) NULL DEFAULT NULL,
+  `Clave_Cliente` int(11) NULL DEFAULT NULL,
+  `SubtotalV` decimal(19, 4) NULL DEFAULT NULL,
+  `DescuentoV` decimal(19, 4) NULL DEFAULT NULL,
+  `Total` decimal(19, 4) NULL DEFAULT NULL,
+  `EnvasesVacios` int(11) NULL DEFAULT NULL,
+  `Pendiente` tinyint(1) NULL DEFAULT NULL,
+  `Condicion` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `Cancelada` tinyint(1) NULL DEFAULT 0,
+  `user` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `user_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`IdV`) USING BTREE,
+  INDEX `id_venta`(`IdV`) USING BTREE,
+  INDEX `cliente`(`Clave_Cliente`) USING BTREE,
+  INDEX `userid`(`user_id`) USING BTREE,
+  CONSTRAINT `cliente` FOREIGN KEY (`Clave_Cliente`) REFERENCES `cat_clientes` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `userid` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`Identificador`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 4159 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
 
 -- ----------------------------
 -- Table structure for det_ventas
@@ -137,7 +181,7 @@ CREATE TABLE `det_ventas`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `mov_inventario`;
 CREATE TABLE `mov_inventario`  (
-  `Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Id_Producto` int(11) NULL DEFAULT NULL,
   `Tipo_Operacion` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `Cantidad` int(11) NULL DEFAULT NULL,
@@ -177,7 +221,7 @@ CREATE TABLE `movimientos`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `reporte_financiero`;
 CREATE TABLE `reporte_financiero`  (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` datetime(0) NULL DEFAULT NULL,
   `tienda_id` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Unico Registro de Tienda',
   `NomTienda` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
@@ -215,43 +259,6 @@ CREATE TABLE `reporte_inventario`  (
   CONSTRAINT `usuarioid` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`Identificador`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 2652 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Table structure for usuarios
--- ----------------------------
-DROP TABLE IF EXISTS `usuarios`;
-CREATE TABLE `usuarios`  (
-  `Identificador` int(11) NOT NULL,
-  `NombreCompleto` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `username` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `contraseña` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `rol` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`Identificador`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for ventas
--- ----------------------------
-DROP TABLE IF EXISTS `ventas`;
-CREATE TABLE `ventas`  (
-  `IdV` int(11) NOT NULL AUTO_INCREMENT,
-  `FechaV` datetime(0) NULL DEFAULT NULL,
-  `Clave_Cliente` int(11) NULL DEFAULT NULL,
-  `SubtotalV` decimal(19, 4) NULL DEFAULT NULL,
-  `DescuentoV` decimal(19, 4) NULL DEFAULT NULL,
-  `Total` decimal(19, 4) NULL DEFAULT NULL,
-  `EnvasesVacios` int(11) NULL DEFAULT NULL,
-  `Pendiente` tinyint(1) NULL DEFAULT NULL,
-  `Condicion` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `Cancelada` tinyint(1) NULL DEFAULT 0,
-  `user` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `user_id` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`IdV`) USING BTREE,
-  INDEX `id_venta`(`IdV`) USING BTREE,
-  INDEX `cliente`(`Clave_Cliente`) USING BTREE,
-  INDEX `userid`(`user_id`) USING BTREE,
-  CONSTRAINT `cliente` FOREIGN KEY (`Clave_Cliente`) REFERENCES `cat_clientes` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `userid` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`Identificador`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4159 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- View structure for v_movinvent_entradas
