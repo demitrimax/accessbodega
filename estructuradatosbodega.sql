@@ -303,7 +303,3 @@ GROUP BY cat_productos.Id, cat_productos.Nombre, ventas.Cancelada
 HAVING ventas.Cancelada=1 ;
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-# EJECUTAR AL FINAL ANTES DE IMPORTAR LOS DATOS DET_VENTAS
-#INSERT INTO `bodegajc`.`ventas`(`IdV`, `FechaV`, `Clave_Cliente`, `SubtotalV`, `DescuentoV`, `Total`, `EnvasesVacios`, `Pendiente`, `Condicion`) VALUES (4010, '2018-07-01 00:00:00', 2, 0, 0, 0, 0, 0, 'EFECTIVO')
-#INSERT INTO `bodegajc`.`ventas`(`IdV`, `FechaV`, `Clave_Cliente`, `SubtotalV`, `DescuentoV`, `Total`, `EnvasesVacios`, `Pendiente`, `Condicion`) VALUES (497, '2018-07-01 00:00:00', 2, 0, 0, 0, 0, 0, 'EFECTIVO')
