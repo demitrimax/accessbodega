@@ -62,6 +62,12 @@ CREATE TABLE `cat_descuentos`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
+INSERT INTO `cat_descuentos`(`id`, `nombre`, `caption`) VALUES ('P25', '25% descuento', '25%');
+INSERT INTO `cat_descuentos`(`id`, `nombre`, `caption`) VALUES ('P29', '29% descuento', '29%');
+INSERT INTO `cat_descuentos`(`id`, `nombre`, `caption`) VALUES ('P30', '30% descuento', '25%');
+INSERT INTO `cat_descuentos`(`id`, `nombre`, `caption`) VALUES ('P35', '35% descuento', '35%');
+INSERT INTO `cat_descuentos`(`id`, `nombre`, `caption`) VALUES ('P40', '40% descuento', '40%');
+
 
 -- ----------------------------
 -- Table structure for cat_clientes
@@ -86,9 +92,9 @@ CREATE TABLE `cat_clientes`  (
 DROP TABLE IF EXISTS `cat_precios`;
 CREATE TABLE `cat_precios`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Id_cliente` int(11) NULL DEFAULT NULL,
-  `id_Producto` int(11) NULL DEFAULT NULL,
-  `Precio` decimal(19, 4) NULL DEFAULT NULL,
+  `Id_cliente` int(11) NOT NULL,
+  `id_Producto` int(11) NOT NULL,
+  `Precio` decimal(19, 4) NOT NULL,
   `user_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   INDEX `usuariomod`(`user_id`) USING BTREE,
@@ -137,15 +143,15 @@ CREATE TABLE `datos_tienda`  (
 DROP TABLE IF EXISTS `ventas`;
 CREATE TABLE `ventas`  (
   `IdV` int(11) NOT NULL AUTO_INCREMENT,
-  `FechaV` datetime(0) NULL DEFAULT NULL,
-  `Clave_Cliente` int(11) NULL DEFAULT NULL,
+  `FechaV` datetime(0) NOT NULL,
+  `Clave_Cliente` int(11) NOT NULL,
   `SubtotalV` decimal(19, 4) NULL DEFAULT NULL,
   `DescuentoV` decimal(19, 4) NULL DEFAULT NULL,
-  `Total` decimal(19, 4) NULL DEFAULT NULL,
+  `Total` decimal(19, 4) NOT NULL,
   `EnvasesVacios` int(11) NULL DEFAULT NULL,
   `Pendiente` tinyint(1) NULL DEFAULT NULL,
   `Condicion` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `Cancelada` tinyint(1) NULL DEFAULT 0,
+  `Cancelada` tinyint(1) NOT NULL DEFAULT 0,
   `user` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `user_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`IdV`) USING BTREE,
@@ -163,11 +169,11 @@ CREATE TABLE `ventas`  (
 DROP TABLE IF EXISTS `det_ventas`;
 CREATE TABLE `det_ventas`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `ClaveVenta` int(11) NULL DEFAULT NULL,
-  `ClaveProdV` int(11) NULL DEFAULT NULL,
-  `CantidadV` int(11) NULL DEFAULT NULL,
-  `PrecioV` decimal(19, 4) NULL DEFAULT NULL,
-  `ImporteV` decimal(19, 4) NULL DEFAULT NULL,
+  `ClaveVenta` int(11) NOT NULL,
+  `ClaveProdV` int(11) NOT NULL,
+  `CantidadV` int(11) NOT NULL,
+  `PrecioV` decimal(19, 4) NOT NULL,
+  `ImporteV` decimal(19, 4) NOT NULL,
   `Fecha` datetime(0) NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `ClaveVenta`(`ClaveVenta`) USING BTREE,
@@ -182,7 +188,7 @@ CREATE TABLE `det_ventas`  (
 DROP TABLE IF EXISTS `mov_inventario`;
 CREATE TABLE `mov_inventario`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Id_Producto` int(11) NULL DEFAULT NULL,
+  `Id_Producto` int(11) NOT NULL,
   `Tipo_Operacion` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `Cantidad` int(11) NULL DEFAULT NULL,
   `Precio` decimal(19, 4) NULL DEFAULT NULL,
@@ -297,3 +303,7 @@ GROUP BY cat_productos.Id, cat_productos.Nombre, ventas.Cancelada
 HAVING ventas.Cancelada=1 ;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+# EJECUTAR AL FINAL ANTES DE IMPORTAR LOS DATOS DET_VENTAS
+#INSERT INTO `bodegajc`.`ventas`(`IdV`, `FechaV`, `Clave_Cliente`, `SubtotalV`, `DescuentoV`, `Total`, `EnvasesVacios`, `Pendiente`, `Condicion`) VALUES (4010, '2018-07-01 00:00:00', 2, 0, 0, 0, 0, 0, 'EFECTIVO')
+#INSERT INTO `bodegajc`.`ventas`(`IdV`, `FechaV`, `Clave_Cliente`, `SubtotalV`, `DescuentoV`, `Total`, `EnvasesVacios`, `Pendiente`, `Condicion`) VALUES (497, '2018-07-01 00:00:00', 2, 0, 0, 0, 0, 0, 'EFECTIVO')
