@@ -1,0 +1,1 @@
+SELECT * FROM `bodegajc`.`ventas` WHERE `FechaV` > '2018-11-24 00:10:55' AND `Cancelada` = '1' LIMIT 0, 1000

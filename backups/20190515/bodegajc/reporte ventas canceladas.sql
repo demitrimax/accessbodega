@@ -1,0 +1,1 @@
+SELECT * FROM ventas where DATE_FORMAT(ventas.FechaV,'dd-mm-yyyy') = '24/11/24' AND ventas.Cancelada = 1 
